@@ -1,30 +1,17 @@
-import { calculateDiscountedPrice } from '@/app/helpers'
-import { Product } from '@/app/types/product'
-import FavoriteItem from '../FavoriteItem/FavoriteItem'
+import { useFavoritesContext } from "@/app/context/Favorites/FavoritesProvider";
+import FavoriteItem from "../FavoriteItem/FavoriteItem";
 
-interface FavoritesListProps {
-  favoriteProducts: Product[]
-  setFavorites: React.Dispatch<React.SetStateAction<Product[]>>
-}
-
-export default function FavoritesList({
-  favoriteProducts,
-  setFavorites
-}: FavoritesListProps) {
-  const totalFavoriteValue = favoriteProducts.reduce((acc, product) => {
-    return (
-      acc + calculateDiscountedPrice(Number(product.preco), product.desconto)
-    )
-  }, 0)
+export default function FavoritesList() {
+  const { favorites, totalFavoritesValue } = useFavoritesContext();
 
   return (
-    <div className='card mb-4 border-0 shadow-sm rounded-4'>
-      <div className='row card-body'>
-        <h5 className='card-title mb-4 fw-bold'>Lista de favoritos:</h5>
+    <div className="card mb-4 border-0 shadow-sm rounded-4">
+      <div className="row card-body">
+        <h5 className="card-title mb-4 fw-bold">Lista de favoritos:</h5>
 
-        {favoriteProducts.length > 0 ? (
-          <div className='table-responsive'>
-            <table className='table table-borderless align-middle'>
+        {favorites.length > 0 ? (
+          <div className="table-responsive">
+            <table className="table table-borderless align-middle">
               <thead>
                 <tr>
                   <th>Product</th>
@@ -34,12 +21,8 @@ export default function FavoritesList({
                 </tr>
               </thead>
               <tbody>
-                {favoriteProducts.map((item) => (
-                  <FavoriteItem
-                    key={item.id}
-                    favoriteItem={item}
-                    setFavorites={setFavorites}
-                  />
+                {favorites.map((item) => (
+                  <FavoriteItem key={item.id} favoriteItem={item} />
                 ))}
               </tbody>
             </table>
@@ -48,15 +31,15 @@ export default function FavoritesList({
           <p>Sua lista de favoritos está vazia.</p>
         )}
       </div>
-      <div className='card-footer d-flex flex-column'>
-        <small className='text-muted'>
-          Quantidade de produtos: {favoriteProducts.length}
+      <div className="card-footer d-flex flex-column">
+        <small className="text-muted">
+          Quantidade de produtos: {favorites.length}
         </small>
 
-        <small className='text-muted'>
-          Valor total: R$ {totalFavoriteValue}
+        <small className="text-muted">
+          Valor total: R$ {totalFavoritesValue}
         </small>
       </div>
     </div>
-  )
+  );
 }
