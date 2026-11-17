@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import type { Metadata } from "next";
 import BootstrapClient from "./components/BootstrapClient";
 import Navbar from "./components/Navbar/Navbar";
+import { AuthProvider } from "./context/Auth/AuthProvider";
 import { FavoritesProvider } from "./context/Favorites/FavoritesProvider";
 
 export const metadata: Metadata = {
@@ -17,11 +18,13 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body>
-        <FavoritesProvider>
-          <Navbar />
-          {children}
-          <BootstrapClient />
-        </FavoritesProvider>
+        <AuthProvider>
+          <FavoritesProvider>
+            <Navbar />
+            {children}
+            <BootstrapClient />
+          </FavoritesProvider>
+        </AuthProvider>
       </body>
     </html>
   );
